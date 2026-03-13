@@ -381,7 +381,7 @@
           {
             "position": {
               "x": 468.75,
-              "y": 60
+              "y": 30
             },
             "size": {
               "width": 112.5,
@@ -542,8 +542,8 @@
             },
             "vertices": [
               {
-                "x": 260,
-                "y": 260
+                "x": 300,
+                "y": 270
               }
             ]
           },
@@ -594,8 +594,8 @@
             },
             "vertices": [
               {
-                "x": 250,
-                "y": 360
+                "x": 300,
+                "y": 370
               }
             ]
           },
@@ -770,7 +770,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "Data Flow",
+              "name": "Payment Response",
               "description": "",
               "outOfScope": false,
               "isTrustBoundary": false,
@@ -784,7 +784,7 @@
               "trustBoundaryIds": []
             },
             "labels": [
-              "Data Flow"
+              "Payment Response"
             ],
             "id": "2a692c52-c1ba-4b5c-aea1-93533c1706bc",
             "source": {
@@ -794,7 +794,167 @@
             "target": {
               "cell": "04634452-f938-4ee1-a027-e95c1658681d",
               "port": "19332d44-ea06-4379-8e3f-af89b3f32588"
-            }
+            },
+            "vertices": [
+              {
+                "x": 600,
+                "y": 190
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Payment Request",
+              "description": "",
+              "outOfScope": false,
+              "isTrustBoundary": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "trustBoundaryIds": []
+            },
+            "labels": [
+              "Payment Request"
+            ],
+            "id": "76c3ebd3-83df-4c6f-829a-4ceef0cf966b",
+            "source": {
+              "cell": "04634452-f938-4ee1-a027-e95c1658681d",
+              "port": "19332d44-ea06-4379-8e3f-af89b3f32588"
+            },
+            "target": {
+              "cell": "c2c3bcfa-f61d-41dc-9385-1a78f7cb8553",
+              "port": "746e99f0-541c-42a6-97ca-0c0172d906e9"
+            },
+            "vertices": [
+              {
+                "x": 450,
+                "y": 190
+              }
+            ]
+          },
+          {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "Client Boundary",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "crossingFlows": [],
+              "containedElements": []
+            },
+            "labels": [
+              "Client Boundary"
+            ],
+            "id": "71457319-ca7c-483b-b0ee-9d8219a91083",
+            "source": {
+              "x": 230,
+              "y": 20
+            },
+            "target": {
+              "x": 230,
+              "y": 430
+            },
+            "vertices": [
+              {
+                "x": 190,
+                "y": 170
+              }
+            ]
+          },
+          {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "Database Boundary",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "crossingFlows": [],
+              "containedElements": []
+            },
+            "labels": [
+              "Database Boundary"
+            ],
+            "id": "cd724208-537a-4af6-9c22-6193586208cc",
+            "source": {
+              "x": 890,
+              "y": 20
+            },
+            "target": {
+              "x": 890,
+              "y": 440
+            },
+            "vertices": [
+              {
+                "x": 850,
+                "y": 190
+              }
+            ]
+          },
+          {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "Trust Boundary",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false,
+              "crossingFlows": [],
+              "containedElements": []
+            },
+            "labels": [
+              "Trust Boundary"
+            ],
+            "id": "1c208975-70b7-4165-981b-8b0650137fe6",
+            "source": {
+              "x": 340,
+              "y": 117
+            },
+            "target": {
+              "x": 1080,
+              "y": 120
+            },
+            "vertices": [
+              {
+                "x": 490,
+                "y": 117
+              }
+            ]
           }
         ]
       }

@@ -2485,7 +2485,7 @@
             },
             "attrs": {
               "text": {
-                "text": "Manager"
+                "text": "Administrator"
               },
               "body": {
                 "stroke": "#333333",
@@ -2581,7 +2581,7 @@
             "id": "2131e226-c97a-4dc9-9f4e-278cfec3c556",
             "data": {
               "type": "tm.Actor",
-              "name": "Manager",
+              "name": "Administrator",
               "description": "",
               "isTrustBoundary": false,
               "outOfScope": false,
@@ -2979,7 +2979,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "Request Sales Report",
+              "name": "New Menu Item Details",
               "description": "",
               "outOfScope": false,
               "isTrustBoundary": false,
@@ -2993,9 +2993,9 @@
               "trustBoundaryIds": []
             },
             "labels": [
-              "Request Sales Report"
+              "New Menu Item Details"
             ],
-            "id": "374e882a-04d5-4803-80f4-c47bb380b9e2",
+            "id": "e160222b-906f-4626-b243-f3a8aa94f6a0",
             "source": {
               "x": 150,
               "y": 320
@@ -3031,7 +3031,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "Query Sales Data",
+              "name": "Create Menu Item",
               "description": "",
               "outOfScope": false,
               "isTrustBoundary": false,
@@ -3045,9 +3045,9 @@
               "trustBoundaryIds": []
             },
             "labels": [
-              "Query Sales Data"
+              "Create Menu Item"
             ],
-            "id": "bbcf09e5-a51a-465a-832b-b9a6feaf6c71",
+            "id": "7416335e-d823-4999-93d2-fe56ea348f6e",
             "source": {
               "x": 590,
               "y": 330
@@ -3058,8 +3058,8 @@
             },
             "vertices": [
               {
-                "x": 770,
-                "y": 260
+                "x": 780,
+                "y": 270
               }
             ]
           },
@@ -3083,7 +3083,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "Sales Data",
+              "name": "Creation Confirmation",
               "description": "",
               "outOfScope": false,
               "isTrustBoundary": false,
@@ -3097,9 +3097,9 @@
               "trustBoundaryIds": []
             },
             "labels": [
-              "Sales Data"
+              "Creation Confirmation"
             ],
-            "id": "7f737347-d2d0-4e2e-b84d-8ad7eaf88087",
+            "id": "478040ca-5cbd-48f5-a891-a46698eab8dd",
             "source": {
               "x": 960,
               "y": 320
@@ -3110,7 +3110,7 @@
             },
             "vertices": [
               {
-                "x": 780,
+                "x": 770,
                 "y": 360
               }
             ]
@@ -3135,7 +3135,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "Formatted Sales Report",
+              "name": "Success Confirmation",
               "description": "",
               "outOfScope": false,
               "isTrustBoundary": false,
@@ -3149,9 +3149,9 @@
               "trustBoundaryIds": []
             },
             "labels": [
-              "Formatted Sales Report"
+              "Success Confirmation"
             ],
-            "id": "c469b4cd-3dc2-4845-9389-1f6083a5b6d4",
+            "id": "6072e7ac-eafb-41ab-80bb-823840c41bda",
             "source": {
               "x": 460,
               "y": 330

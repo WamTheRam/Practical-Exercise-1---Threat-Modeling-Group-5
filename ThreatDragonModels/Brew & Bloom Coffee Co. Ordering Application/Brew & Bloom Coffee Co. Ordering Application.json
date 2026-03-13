@@ -1,0 +1,16 @@
+{
+  "version": "2.6.0",
+  "summary": {
+    "title": "Brew & Bloom Coffee Co. Ordering Application",
+    "owner": "Group 5",
+    "description": "Threat model for the Brew & Bloom coffee ordering system",
+    "id": 0
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [],
+    "diagramTop": 0,
+    "reviewer": "",
+    "threatTop": 0
+  }
+}

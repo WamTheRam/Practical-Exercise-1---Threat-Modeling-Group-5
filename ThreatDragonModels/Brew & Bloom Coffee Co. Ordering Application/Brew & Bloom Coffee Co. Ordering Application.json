@@ -930,7 +930,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Boundary",
-              "name": "Trust Boundary",
+              "name": "Third-Party Boundary",
               "description": "",
               "isTrustBoundary": true,
               "hasOpenThreats": false,
@@ -938,20 +938,24 @@
               "containedElements": []
             },
             "labels": [
-              "Trust Boundary"
+              "Third-Party Boundary"
             ],
             "id": "1c208975-70b7-4165-981b-8b0650137fe6",
             "source": {
-              "x": 340,
-              "y": 117
+              "x": -50,
+              "y": 120
             },
             "target": {
-              "x": 1080,
+              "x": 910,
               "y": 120
             },
             "vertices": [
               {
-                "x": 490,
+                "x": 330,
+                "y": 117
+              },
+              {
+                "x": 640,
                 "y": 117
               }
             ]

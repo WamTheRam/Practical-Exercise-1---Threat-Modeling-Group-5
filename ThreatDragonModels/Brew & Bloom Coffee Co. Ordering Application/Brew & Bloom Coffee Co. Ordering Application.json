@@ -3,14 +3,14 @@
   "summary": {
     "title": "Brew & Bloom Coffee Co. Ordering Application",
     "owner": "Group 5",
-    "description": "Threat model for the Brew & Bloom coffee ordering system",
+    "description": "",
     "id": 0
   },
   "detail": {
     "contributors": [],
     "diagrams": [
       {
-        "id": 0,
+        "id": 3,
         "title": "DFD 1 – Customer Places an Order",
         "diagramType": "Generic",
         "placeholder": "New generic diagram description",
@@ -19,7 +19,7 @@
         "cells": []
       }
     ],
-    "diagramTop": 1,
+    "diagramTop": 4,
     "reviewer": "",
     "threatTop": 0
   }

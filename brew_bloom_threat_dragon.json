@@ -1,0 +1,543 @@
+{
+  "summary": {
+    "title": "Brew & Bloom Coffee Co. Ordering Application",
+    "owner": "Security Team",
+    "description": "Threat model for the Brew & Bloom Coffee Co. online ordering application covering 4 primary data flow scenarios.",
+    "id": 0
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "id": 0,
+        "title": "DFD 1 - Customer Places an Order",
+        "diagramType": "DATA_FLOW",
+        "placeholder": "New DFD Diagram",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "version": "2.2.0",
+        "cells": [
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 320, "height": 380 },
+            "position": { "x": 20, "y": 60 },
+            "attrs": { "text": { "text": "Client Trust Boundary (Untrusted)" } },
+            "id": "boundary-client",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Client Trust Boundary (Untrusted)", "description": "All input from this boundary must be validated server-side" }
+          },
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 320, "height": 380 },
+            "position": { "x": 390, "y": 60 },
+            "attrs": { "text": { "text": "Server Trust Boundary" } },
+            "id": "boundary-server",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Server Trust Boundary", "description": "Web application server - trusted for business logic" }
+          },
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 200, "height": 180 },
+            "position": { "x": 760, "y": 60 },
+            "attrs": { "text": { "text": "Payment Gateway Boundary (Partial Trust)" } },
+            "id": "boundary-payment",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Payment Gateway Boundary (Partial Trust)", "description": "External third-party, communication secured but data validated" }
+          },
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 200, "height": 180 },
+            "position": { "x": 760, "y": 280 },
+            "attrs": { "text": { "text": "Database Boundary (Trusted)" } },
+            "id": "boundary-db",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Database Boundary (Trusted)", "description": "MongoDB trusts calls from web application server identity" }
+          },
+          {
+            "type": "tm.Actor",
+            "size": { "width": 120, "height": 60 },
+            "position": { "x": 60, "y": 180 },
+            "attrs": { "text": { "text": "Customer\n(Frontend Browser)" } },
+            "id": "actor-customer",
+            "zIndex": 10,
+            "data": { "type": "tm.Actor", "name": "Customer (Frontend Browser)", "description": "End user placing coffee orders via web browser", "outOfScope": false, "reasonOutOfScope": "", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Process",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 430, "y": 100 },
+            "attrs": { "text": { "text": "Input Validation &\nBusiness Logic" } },
+            "id": "process-validate",
+            "zIndex": 10,
+            "data": { "type": "tm.Process", "name": "Input Validation & Business Logic", "description": "Validates order details, item availability, customizations", "outOfScope": false, "reasonOutOfScope": "", "handlesCardPayment": false, "handlesGoodsOrServices": false, "isWebApplication": true, "privilegeLevel": "high", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Process",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 430, "y": 260 },
+            "attrs": { "text": { "text": "Order Management\n& Confirmation" } },
+            "id": "process-order",
+            "zIndex": 10,
+            "data": { "type": "tm.Process", "name": "Order Management & Confirmation", "description": "Records order, sends confirmation back to customer", "outOfScope": false, "reasonOutOfScope": "", "handlesCardPayment": false, "handlesGoodsOrServices": true, "isWebApplication": true, "privilegeLevel": "high", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Store",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 790, "y": 310 },
+            "attrs": { "text": { "text": "MongoDB Database" } },
+            "id": "store-mongodb",
+            "zIndex": 10,
+            "data": { "type": "tm.Store", "name": "MongoDB Database", "description": "Stores order records and payment status", "outOfScope": false, "reasonOutOfScope": "", "isALog": false, "storesCredentials": false, "isEncrypted": true, "isSigned": false, "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Actor",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 790, "y": 100 },
+            "attrs": { "text": { "text": "Payment Gateway\n(Third-Party)" } },
+            "id": "actor-payment",
+            "zIndex": 10,
+            "data": { "type": "tm.Actor", "name": "Payment Gateway (Third-Party)", "description": "External payment processor handling tokenized payment information", "outOfScope": false, "reasonOutOfScope": "", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "actor-customer" },
+            "target": { "id": "process-validate" },
+            "vertices": [],
+            "id": "flow-1-1",
+            "attrs": { "line": { "text": "1.1 Order Details\n(items, customizations)" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "1.1 Order Details (items, customizations)", "description": "Customer submits order details to web application server", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-validate" },
+            "target": { "id": "actor-payment" },
+            "vertices": [],
+            "id": "flow-1-3",
+            "attrs": { "line": { "text": "1.3 Tokenized\nPayment Request" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "1.3 Tokenized Payment Request", "description": "Server sends tokenized payment info to Payment Gateway", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS/TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "actor-payment" },
+            "target": { "id": "process-validate" },
+            "vertices": [],
+            "id": "flow-1-4",
+            "attrs": { "line": { "text": "1.4 Transaction\nResponse (success/fail)" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "1.4 Transaction Response (success/fail)", "description": "Payment Gateway returns transaction result", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS/TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-validate" },
+            "target": { "id": "process-order" },
+            "vertices": [],
+            "id": "flow-1-5a",
+            "attrs": { "line": { "text": "Payment Success\n→ Record Order" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "Payment Success → Record Order", "description": "If payment successful, trigger order recording", "isBidirectional": false, "isEncrypted": false, "isPublicNetwork": false, "protocol": "Internal", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-order" },
+            "target": { "id": "store-mongodb" },
+            "vertices": [],
+            "id": "flow-1-5",
+            "attrs": { "line": { "text": "1.5 Write Order\n& Payment Status" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "1.5 Write Order & Payment Status", "description": "Server records new order details and payment status in MongoDB", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": false, "protocol": "MongoDB TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "store-mongodb" },
+            "target": { "id": "process-order" },
+            "vertices": [],
+            "id": "flow-1-6",
+            "attrs": { "line": { "text": "1.6 Order Record\nStored Confirmation" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "1.6 Order Record Stored Confirmation", "description": "MongoDB confirms storage of order record", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": false, "protocol": "MongoDB TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-order" },
+            "target": { "id": "actor-customer" },
+            "vertices": [],
+            "id": "flow-1-7",
+            "attrs": { "line": { "text": "1.7 Order Confirmation\n& Status Update" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "1.7 Order Confirmation & Status Update", "description": "Server sends confirmation and order status to customer", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS", "hasOpenThreats": false, "threats": [] }
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "title": "DFD 2 - Barista Updates Order Status",
+        "diagramType": "DATA_FLOW",
+        "placeholder": "New DFD Diagram",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "version": "2.2.0",
+        "cells": [
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 280, "height": 380 },
+            "position": { "x": 20, "y": 60 },
+            "attrs": { "text": { "text": "Client Trust Boundary (Untrusted)" } },
+            "id": "boundary-client-2",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Client Trust Boundary (Untrusted)", "description": "Staff interface client - untrusted, all inputs validated server-side" }
+          },
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 300, "height": 380 },
+            "position": { "x": 350, "y": 60 },
+            "attrs": { "text": { "text": "Server Trust Boundary" } },
+            "id": "boundary-server-2",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Server Trust Boundary", "description": "Web application server handling authentication and order management" }
+          },
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 200, "height": 200 },
+            "position": { "x": 700, "y": 160 },
+            "attrs": { "text": { "text": "Database Boundary (Trusted)" } },
+            "id": "boundary-db-2",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Database Boundary (Trusted)", "description": "MongoDB trusts calls from web application server identity" }
+          },
+          {
+            "type": "tm.Actor",
+            "size": { "width": 120, "height": 60 },
+            "position": { "x": 60, "y": 180 },
+            "attrs": { "text": { "text": "Barista\n(Staff Interface)" } },
+            "id": "actor-barista",
+            "zIndex": 10,
+            "data": { "type": "tm.Actor", "name": "Barista (Staff Interface)", "description": "Coffee shop staff updating order statuses", "outOfScope": false, "reasonOutOfScope": "", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Process",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 390, "y": 100 },
+            "attrs": { "text": { "text": "Authentication &\nAuthorization" } },
+            "id": "process-auth-2",
+            "zIndex": 10,
+            "data": { "type": "tm.Process", "name": "Authentication & Authorization", "description": "Authenticates barista and authorizes access to order data", "outOfScope": false, "reasonOutOfScope": "", "isWebApplication": true, "privilegeLevel": "high", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Process",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 390, "y": 270 },
+            "attrs": { "text": { "text": "Order Status\nValidation & Update" } },
+            "id": "process-status",
+            "zIndex": 10,
+            "data": { "type": "tm.Process", "name": "Order Status Validation & Update", "description": "Validates status update and writes to database", "outOfScope": false, "reasonOutOfScope": "", "isWebApplication": true, "privilegeLevel": "high", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Store",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 730, "y": 210 },
+            "attrs": { "text": { "text": "MongoDB Database\n(Orders Collection)" } },
+            "id": "store-mongodb-2",
+            "zIndex": 10,
+            "data": { "type": "tm.Store", "name": "MongoDB Database (Orders Collection)", "description": "Stores and retrieves order records", "outOfScope": false, "reasonOutOfScope": "", "isALog": false, "storesCredentials": false, "isEncrypted": true, "isSigned": false, "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "actor-barista" },
+            "target": { "id": "process-auth-2" },
+            "vertices": [],
+            "id": "flow-2-1",
+            "attrs": { "line": { "text": "2.1 Login + Request\nIncoming Orders" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "2.1 Login + Request Incoming Orders", "description": "Barista logs in and requests view of incoming orders", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-auth-2" },
+            "target": { "id": "store-mongodb-2" },
+            "vertices": [],
+            "id": "flow-2-2",
+            "attrs": { "line": { "text": "2.2 Query Pending\nOrders" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "2.2 Query Pending Orders", "description": "Server queries MongoDB for relevant pending order data", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": false, "protocol": "MongoDB TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "store-mongodb-2" },
+            "target": { "id": "process-auth-2" },
+            "vertices": [],
+            "id": "flow-2-3",
+            "attrs": { "line": { "text": "2.3 Pending Order\nData" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "2.3 Pending Order Data", "description": "MongoDB returns pending order data to server", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": false, "protocol": "MongoDB TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-auth-2" },
+            "target": { "id": "actor-barista" },
+            "vertices": [],
+            "id": "flow-2-4",
+            "attrs": { "line": { "text": "2.4 Order List\nDisplay" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "2.4 Order List Display", "description": "Server sends order list to barista for display", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "actor-barista" },
+            "target": { "id": "process-status" },
+            "vertices": [],
+            "id": "flow-2-6",
+            "attrs": { "line": { "text": "2.6 Updated Order\nStatus (e.g. Preparing)" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "2.6 Updated Order Status (e.g. Preparing)", "description": "Barista sends updated status to server", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-status" },
+            "target": { "id": "store-mongodb-2" },
+            "vertices": [],
+            "id": "flow-2-7",
+            "attrs": { "line": { "text": "2.7 Validated Status\nUpdate Write" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "2.7 Validated Status Update Write", "description": "Server validates and writes updated order status to MongoDB", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": false, "protocol": "MongoDB TLS", "hasOpenThreats": false, "threats": [] }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "DFD 3 - Manager Accesses Basic Sales Reports",
+        "diagramType": "DATA_FLOW",
+        "placeholder": "New DFD Diagram",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "version": "2.2.0",
+        "cells": [
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 280, "height": 380 },
+            "position": { "x": 20, "y": 60 },
+            "attrs": { "text": { "text": "Client Trust Boundary (Untrusted)" } },
+            "id": "boundary-client-3",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Client Trust Boundary (Untrusted)", "description": "Manager browser client - untrusted" }
+          },
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 300, "height": 380 },
+            "position": { "x": 350, "y": 60 },
+            "attrs": { "text": { "text": "Server Trust Boundary" } },
+            "id": "boundary-server-3",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Server Trust Boundary", "description": "Web application server - handles auth and report processing" }
+          },
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 200, "height": 200 },
+            "position": { "x": 700, "y": 160 },
+            "attrs": { "text": { "text": "Database Boundary (Trusted)" } },
+            "id": "boundary-db-3",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Database Boundary (Trusted)", "description": "MongoDB trusts calls from web application server" }
+          },
+          {
+            "type": "tm.Actor",
+            "size": { "width": 120, "height": 60 },
+            "position": { "x": 60, "y": 180 },
+            "attrs": { "text": { "text": "Manager\n(Staff Interface)" } },
+            "id": "actor-manager",
+            "zIndex": 10,
+            "data": { "type": "tm.Actor", "name": "Manager (Staff Interface)", "description": "Manager accessing sales reports via staff web interface", "outOfScope": false, "reasonOutOfScope": "", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Process",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 390, "y": 100 },
+            "attrs": { "text": { "text": "Authentication &\nAuthorization" } },
+            "id": "process-auth-3",
+            "zIndex": 10,
+            "data": { "type": "tm.Process", "name": "Authentication & Authorization", "description": "Authenticates manager and verifies report access authorization", "outOfScope": false, "reasonOutOfScope": "", "isWebApplication": true, "privilegeLevel": "high", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Process",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 390, "y": 270 },
+            "attrs": { "text": { "text": "Report Processing\n& Formatting" } },
+            "id": "process-report",
+            "zIndex": 10,
+            "data": { "type": "tm.Process", "name": "Report Processing & Formatting", "description": "Calculates totals, aggregates and formats sales data for display", "outOfScope": false, "reasonOutOfScope": "", "isWebApplication": true, "privilegeLevel": "high", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Store",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 730, "y": 210 },
+            "attrs": { "text": { "text": "MongoDB Database\n(Sales/Orders Data)" } },
+            "id": "store-mongodb-3",
+            "zIndex": 10,
+            "data": { "type": "tm.Store", "name": "MongoDB Database (Sales/Orders Data)", "description": "Source of aggregated sales data for reporting", "outOfScope": false, "reasonOutOfScope": "", "isALog": false, "storesCredentials": false, "isEncrypted": true, "isSigned": false, "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "actor-manager" },
+            "target": { "id": "process-auth-3" },
+            "vertices": [],
+            "id": "flow-3-1",
+            "attrs": { "line": { "text": "3.1 Login + Request\nSales Reports" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "3.1 Login + Request Sales Reports", "description": "Manager logs in and requests sales report view", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-auth-3" },
+            "target": { "id": "store-mongodb-3" },
+            "vertices": [],
+            "id": "flow-3-2",
+            "attrs": { "line": { "text": "3.2 Query Aggregated\nSales Data" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "3.2 Query Aggregated Sales Data", "description": "Server queries MongoDB for aggregated sales data", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": false, "protocol": "MongoDB TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "store-mongodb-3" },
+            "target": { "id": "process-report" },
+            "vertices": [],
+            "id": "flow-3-3",
+            "attrs": { "line": { "text": "3.3 Raw Sales\nData" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "3.3 Raw Sales Data", "description": "MongoDB returns requested sales data to server", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": false, "protocol": "MongoDB TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-report" },
+            "target": { "id": "actor-manager" },
+            "vertices": [],
+            "id": "flow-3-4",
+            "attrs": { "line": { "text": "3.4 Formatted Sales\nReport" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "3.4 Formatted Sales Report", "description": "Server sends processed and formatted sales report to manager", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS", "hasOpenThreats": false, "threats": [] }
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "DFD 4 - Administrator Adds New Menu Item",
+        "diagramType": "DATA_FLOW",
+        "placeholder": "New DFD Diagram",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "version": "2.2.0",
+        "cells": [
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 280, "height": 380 },
+            "position": { "x": 20, "y": 60 },
+            "attrs": { "text": { "text": "Client Trust Boundary (Untrusted)" } },
+            "id": "boundary-client-4",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Client Trust Boundary (Untrusted)", "description": "Admin browser - untrusted, all input must be validated server-side" }
+          },
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 300, "height": 380 },
+            "position": { "x": 350, "y": 60 },
+            "attrs": { "text": { "text": "Server Trust Boundary" } },
+            "id": "boundary-server-4",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Server Trust Boundary", "description": "Web application server - validates and authorizes menu management" }
+          },
+          {
+            "type": "tm.BoundaryBox",
+            "size": { "width": 200, "height": 200 },
+            "position": { "x": 700, "y": 160 },
+            "attrs": { "text": { "text": "Database Boundary (Trusted)" } },
+            "id": "boundary-db-4",
+            "zIndex": -1,
+            "data": { "type": "tm.BoundaryBox", "name": "Database Boundary (Trusted)", "description": "MongoDB trusts calls from web application server" }
+          },
+          {
+            "type": "tm.Actor",
+            "size": { "width": 120, "height": 60 },
+            "position": { "x": 60, "y": 180 },
+            "attrs": { "text": { "text": "Administrator\n(Staff Interface)" } },
+            "id": "actor-admin",
+            "zIndex": 10,
+            "data": { "type": "tm.Actor", "name": "Administrator (Staff Interface)", "description": "System administrator managing menu items via staff interface", "outOfScope": false, "reasonOutOfScope": "", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Process",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 390, "y": 100 },
+            "attrs": { "text": { "text": "Input Validation &\nAdmin Authorization" } },
+            "id": "process-auth-4",
+            "zIndex": 10,
+            "data": { "type": "tm.Process", "name": "Input Validation & Admin Authorization", "description": "Validates menu item data and authorizes admin request", "outOfScope": false, "reasonOutOfScope": "", "isWebApplication": true, "privilegeLevel": "high", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Process",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 390, "y": 270 },
+            "attrs": { "text": { "text": "Menu Item\nCreation" } },
+            "id": "process-menu",
+            "zIndex": 10,
+            "data": { "type": "tm.Process", "name": "Menu Item Creation", "description": "Sends validated new menu item data to database for creation", "outOfScope": false, "reasonOutOfScope": "", "isWebApplication": true, "privilegeLevel": "high", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Store",
+            "size": { "width": 140, "height": 60 },
+            "position": { "x": 730, "y": 210 },
+            "attrs": { "text": { "text": "MongoDB Database\n(Menu Collection)" } },
+            "id": "store-mongodb-4",
+            "zIndex": 10,
+            "data": { "type": "tm.Store", "name": "MongoDB Database (Menu Collection)", "description": "Stores menu item records", "outOfScope": false, "reasonOutOfScope": "", "isALog": false, "storesCredentials": false, "isEncrypted": true, "isSigned": false, "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "actor-admin" },
+            "target": { "id": "process-auth-4" },
+            "vertices": [],
+            "id": "flow-4-2",
+            "attrs": { "line": { "text": "4.2 New Menu Item\nDetails (name, price…)" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "4.2 New Menu Item Details (name, price...)", "description": "Administrator submits new menu item data to server", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-auth-4" },
+            "target": { "id": "process-menu" },
+            "vertices": [],
+            "id": "flow-4-3-4",
+            "attrs": { "line": { "text": "4.3 Validated &\nAuthorized Data" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "4.3 Validated & Authorized Data", "description": "Server validates and authorizes, passes data for creation", "isBidirectional": false, "isEncrypted": false, "isPublicNetwork": false, "protocol": "Internal", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-menu" },
+            "target": { "id": "store-mongodb-4" },
+            "vertices": [],
+            "id": "flow-4-4",
+            "attrs": { "line": { "text": "4.4 Create Menu\nItem Record" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "4.4 Create Menu Item Record", "description": "Server sends new menu item data to MongoDB for creation", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": false, "protocol": "MongoDB TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "store-mongodb-4" },
+            "target": { "id": "process-menu" },
+            "vertices": [],
+            "id": "flow-4-5",
+            "attrs": { "line": { "text": "4.5 Record Created\nConfirmation" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "4.5 Record Created Confirmation", "description": "MongoDB confirms menu item record creation", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": false, "protocol": "MongoDB TLS", "hasOpenThreats": false, "threats": [] }
+          },
+          {
+            "type": "tm.Flow",
+            "source": { "id": "process-menu" },
+            "target": { "id": "actor-admin" },
+            "vertices": [],
+            "id": "flow-4-6",
+            "attrs": { "line": { "text": "4.6 Success\nConfirmation" } },
+            "zIndex": 10,
+            "data": { "type": "tm.Flow", "name": "4.6 Success Confirmation", "description": "Server confirms successful menu item addition to administrator", "isBidirectional": false, "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS", "hasOpenThreats": false, "threats": [] }
+          }
+        ]
+      }
+    ]
+  }
+}
